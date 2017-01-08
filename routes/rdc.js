@@ -1,4 +1,4 @@
-var Feed = require('feed');
+var RSS = require('rss');
 
 var express = require('express');
 var router = express.Router();
@@ -13,14 +13,11 @@ var async = require('async');
 router.get('/:id', function (req, res, next) {
     var url = 'http://www.rdc.pl/publicystyka/podcasty/' + req.params.id + '/';
 
-    var feed = new Feed({
-        title: 'RDC RSS (' + req.params.id + ')',
-        description: 'RSS feed with podcasts from RDC (' + req.params.id + ')',
-        link: url,
-        image: 'http://www.rdc.pl/xn_rdclogo2.jpg.pagespeed.ic.MFxM58Sw1H.jpg',
-        copyright: 'Copyright 2016 by Polskie Radio S.A. Radio Dla Ciebie'
+    var feed = new RSS({
+        title: 'RDC (' + req.params.id + ')',
+        site_url: 'http://www.rdc.pl',
+        image: 'http://www.rdc.pl/xn_rdclogo2.jpg.pagespeed.ic.MFxM58Sw1H.jpg'
     });
-
 
     request(url, function (error, response, html) {
         if (!error) {
@@ -58,10 +55,10 @@ router.get('/:id', function (req, res, next) {
                     console.log('ok: ' + results);
 
                     for (var i = 0, len = results.length; i < len; i++) {
-                        feed.addItem(results[i]);
+                        feed.item(results[i]);
                     }
                     res.set('Content-Type', 'text/xml');
-                    res.send(feed.render('rss-2.0'));
+                    res.send(feed.xml());
                 }
             });
 
@@ -87,8 +84,8 @@ function getAndProcessSubpage(callback, params) {
                 console.log('match: ' + match[1]);
                 var item = {
                     title: params.title,
-                    link: match[1],
-                    description: params.title,
+                    url: params.url,
+                    enclosure: { url: match[1] }
                 };
 
                 callback(false, item);
