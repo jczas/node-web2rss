@@ -10,7 +10,6 @@ var dom = require('xmldom').DOMParser;
 
 var async = require('async');
 
-/* GET home page. */
 router.get('/:id', function (req, res, next) {
     var url = 'http://www.rdc.pl/publicystyka/podcasty/' + req.params.id + '/';
 
