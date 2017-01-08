@@ -16,7 +16,8 @@ router.get('/:id', function (req, res, next) {
     var feed = new RSS({
         title: 'RDC (' + req.params.id + ')',
         site_url: 'http://www.rdc.pl',
-        image: 'http://www.rdc.pl/xn_rdclogo2.jpg.pagespeed.ic.MFxM58Sw1H.jpg'
+        image_url: 'http://www.rdc.pl/xn_rdclogo2.jpg.pagespeed.ic.MFxM58Sw1H.jpg',
+        ttl: '5'
     });
 
     request(url, function (error, response, html) {
