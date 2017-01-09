@@ -13,17 +13,13 @@ var async = require('async');
 router.get('/:id', function (req, res, next) {
     var url = 'http://www.rdc.pl/publicystyka/podcasty/' + req.params.id + '/';
 
-    var feed = new RSS({
-        title: 'RDC (' + req.params.id + ')',
-        site_url: 'http://www.rdc.pl',
-        image_url: 'http://www.rdc.pl/xn_rdclogo2.jpg.pagespeed.ic.MFxM58Sw1H.jpg',
-        ttl: '5'
-    });
-
     request(url, function (error, response, html) {
         if (!error) {
             var doc = new dom().parseFromString(html);
+            var main_title = xpath.select1("//title", doc).firstChild.data;
             var nodes = xpath.select("//article/header//a", doc);
+
+            console.log("main_title: " + main_title);
 
             var subpages = [];
             for (var i = 0, len = nodes.length; i < len; i++) {
@@ -54,6 +50,13 @@ router.get('/:id', function (req, res, next) {
                     res.send('Problem with subpage');
                 } else {
                     console.log('ok: ' + results);
+
+                    var feed = new RSS({
+                        title: main_title,
+                        site_url: 'http://www.rdc.pl',
+                        image_url: 'http://www.rdc.pl/xn_rdclogo2.jpg.pagespeed.ic.MFxM58Sw1H.jpg',
+                        ttl: '5'
+                    });
 
                     for (var i = 0, len = results.length; i < len; i++) {
                         feed.item(results[i]);

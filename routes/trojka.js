@@ -13,17 +13,14 @@ var async = require('async');
 router.get('/:id', function (req, res, next) {
     var url = 'http://www.polskieradio.pl/9/' + req.params.id + '/';
 
-    var feed = new RSS({
-        title: 'Trojka (' + req.params.id + ')',
-        site_url: 'http://www.polskieradio.pl/9,Trojka',
-        image_url: 'http://www.warsztatykultury.pl/wp-content/uploads/2013/07/3jka.jpg',
-        ttl: '5'
-    });
 
     request(url, function (error, response, html) {
         if (!error) {
             var doc = new dom().parseFromString(html);
+            var main_title = xpath.select1("//title", doc).firstChild.data;
             var nodes = xpath.select("//div/div/div/div/div/div/div/div/div/section/article/a", doc);
+
+            console.log("main_title: " + main_title);
 
             var subpages = [];
             for (var i = 0, len = nodes.length; i < len; i++) {
@@ -54,6 +51,13 @@ router.get('/:id', function (req, res, next) {
                     res.send('Problem with subpage');
                 } else {
                     console.log('ok: ' + results);
+
+                    var feed = new RSS({
+                        title: main_title,
+                        site_url: 'http://www.polskieradio.pl/9,Trojka',
+                        image_url: 'http://www.warsztatykultury.pl/wp-content/uploads/2013/07/3jka.jpg',
+                        ttl: '5'
+                    });
 
                     for (var i = 0, len = results.length; i < len; i++) {
                         feed.item(results[i]);
