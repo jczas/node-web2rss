@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var ping = require('./routes/ping');
 var rdc = require('./routes/rdc');
 var trojka = require('./routes/trojka');
+var sk = require('./routes/sk');
 
 var app = express();
 
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/ping', ping);
 app.use('/rss/rdc', rdc);
 app.use('/rss/trojka', trojka);
+app.use('/rss/sk', sk);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
