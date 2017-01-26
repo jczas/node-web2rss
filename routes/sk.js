@@ -94,11 +94,13 @@ function getAndProcessSubpage(callback, params) {
 
                 callback(false, item);
             } else {
-                callback(true);
+                console.log("Error in data in getAndProcessSubpage: " + params.url);
+                callback(false); // ignore errors
             }
 
         } else {
-            callback(true);
+            console.log("Error in request in getAndProcessSubpage: " + params.url);
+            callback(false); // ignore errors
         }
     });
 }
