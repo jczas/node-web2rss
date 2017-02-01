@@ -10,7 +10,7 @@ var dom = require('xmldom').DOMParser;
 
 var async = require('async');
 
-router.get('/:id', function (req, res, next) {
+router.get('/:id', function (req, res) {
     var url = 'http://www.polskieradio.pl/9/' + req.params.id + '/';
 
 
@@ -60,7 +60,9 @@ router.get('/:id', function (req, res, next) {
                     });
 
                     for (var i = 0, len = results.length; i < len; i++) {
-                        feed.item(results[i]);
+                        if (results[i] != null) {
+                            feed.item(results[i]);
+                        }
                     }
                     res.set('Content-Type', 'text/xml');
                     res.send(feed.xml());

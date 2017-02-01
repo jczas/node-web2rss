@@ -11,13 +11,13 @@ var dom = require('xmldom').DOMParser;
 var async = require('async');
 
 router.get('/', function (req, res) {
-    var url = 'http://szklokontaktowe.tvn24.pl/';
+    var url = 'http://telewizjarepublika.pl/programy/salonik-polityczny/16';
 
     request(url, function (error, response, html) {
         if (!error) {
             var doc = new dom().parseFromString(html);
             var main_title = xpath.select1("//title", doc).firstChild.data;
-            var nodes = xpath.select('//a[@class="btnPlayOnImg small"]', doc);
+            var nodes = xpath.select('//div[@class="video-title"]//a', doc);
 
             console.log("main_title: " + main_title);
 
@@ -27,8 +27,8 @@ router.get('/', function (req, res) {
 
                 console.log("node: " + nodes[i].toString());
                 (function () {
-                    var suburl = 'http://szklokontaktowe.tvn24.pl' + (nodes[i].attributes[1].value).replace(/#autoplay$/, '');
-                    var title = (nodes[i].attributes[0].value).substring(9);
+                    var suburl = 'http://telewizjarepublika.pl' + (nodes[i].attributes[0].value);
+                    var title = (nodes[i].firstChild.data);
 
                     console.log("node.suburl: " + suburl);
                     console.log("node.title: " + title);
@@ -53,8 +53,8 @@ router.get('/', function (req, res) {
 
                     var feed = new RSS({
                         title: main_title,
-                        site_url: 'http://szklokontaktowe.tvn24.pl/',
-                        image_url: 'http://szklokontaktowe.tvn24.pl/img/logo_small_tvn24.png',
+                        site_url: 'http://telewizjarepublika.pl/programy/salonik-polityczny/16/',
+                        image_url: 'http://telewizjarepublika.pl/favicon_64x64.png',
                         ttl: '5'
                     });
 
@@ -78,12 +78,11 @@ router.get('/', function (req, res) {
 function getAndProcessSubpage(callback, params) {
     console.log("calling getAndProcessSubpage: " + params.url);
 
-
     request(params.url, function (error, response, html) {
         if (!error) {
             console.log("finished getAndProcessSubpage: " + params.url);
 
-            var regEx = /data-src="(.*\.mp4)"/;
+            var regEx = /source src="(.*\.mp4)"/;
             var match = regEx.exec(html);
 
             if (match !== null) {

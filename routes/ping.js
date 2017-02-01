@@ -3,7 +3,7 @@ var RSS = require('rss');
 var express = require('express');
 var router = express.Router();
 
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
   var feed = new RSS({
     title: 'Ping RSS',
     site_url: 'http://a.b.c',
