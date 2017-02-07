@@ -9,6 +9,7 @@ var rdc = require('./routes/rdc');
 var trojka = require('./routes/trojka');
 var sk = require('./routes/sk');
 var sp = require('./routes/sp');
+var terazja = require('./routes/terazja');
 
 var app = express();
 
@@ -29,6 +30,7 @@ app.use('/rss/rdc', rdc);
 app.use('/rss/trojka', trojka);
 app.use('/rss/sk', sk);
 app.use('/rss/sp', sp);
+app.use('/rss/terazja', terazja);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -11,31 +11,28 @@ var dom = require('xmldom').DOMParser;
 var async = require('async');
 
 router.get('/', function (req, res) {
-    var url = 'http://telewizjarepublika.pl/programy/salonik-polityczny/16';
+    var url = 'http://www.nowa.tv/wszystko-o/teraz-ja,5/16/';
 
     request(url, function (error, response, html) {
         if (!error) {
             var doc = new dom().parseFromString(html);
             var main_title = xpath.select1("//title", doc).firstChild.data;
-            var nodes = xpath.select('//div[@class="video-title"]//a', doc);
+            var nodes = xpath.select('//div[@class="box age_12 video"]/a', doc);
 
             console.log("main_title: " + main_title);
 
             var subpages = [];
-            for (var i = 0, len = nodes.length; i < len && i < 5; i++) {
+            for (var i = 0, len = nodes.length; i < len; i++) {
 
 
                 console.log("node: " + nodes[i].toString());
                 (function () {
-                    var suburl = 'http://telewizjarepublika.pl' + (nodes[i].attributes[0].value);
-                    var title = (nodes[i].firstChild.data);
+                    var suburl = 'http://www.nowa.tv' + (nodes[i].attributes[0].value);
 
                     console.log("node.suburl: " + suburl);
-                    console.log("node.title: " + title);
 
                     subpages.push(function (callback) {
                         getAndProcessSubpage(callback, {
-                            title: title,
                             url: suburl
                         });
                     });
@@ -53,8 +50,8 @@ router.get('/', function (req, res) {
 
                     var feed = new RSS({
                         title: main_title,
-                        site_url: 'http://telewizjarepublika.pl/programy/salonik-polityczny/16/',
-                        image_url: 'http://telewizjarepublika.pl/favicon_64x64.png',
+                        site_url: 'http://www.nowa.tv/wszystko-o/teraz-ja,5/16/',
+                        image_url: 'http://www.nowa.tv/media/static/images/logo.png',
                         ttl: '5'
                     });
 
@@ -82,15 +79,31 @@ function getAndProcessSubpage(callback, params) {
         if (!error) {
             console.log("finished getAndProcessSubpage: " + params.url);
 
-            var regEx = /source src="(.*\.mp4)"/;
-            var match = regEx.exec(html);
+            var regExUrl = /var mp4 = "(.*\.mp4)"/;
+            var matchUrl = regExUrl.exec(html);
 
-            if (match !== null) {
-                console.log('match: ' + match[1]);
+            if (matchUrl !== null) {
+                console.log('match url: ' + matchUrl[1]);
+            } else {
+                console.log('problem with url regex');
+            }
+            
+            var regExTitle = /var title = "(.*)"/;
+            var matchTitle = regExTitle.exec(html);
+
+            if (matchTitle !== null) {
+                console.log('match title: ' + matchTitle[1]);
+            } else {
+                console.log('problem with title regex');
+            }
+
+            if (matchUrl !== null && matchTitle !== null) {
+                console.log('match url: ' + matchUrl[1]);
+                console.log('match title: ' + matchTitle[1]);
                 var item = {
-                    title: params.title,
+                    title: matchTitle[1],
                     url: params.url,
-                    enclosure: { url: match[1] }
+                    enclosure: { url: matchUrl[1] }
                 };
 
                 callback(false, item);

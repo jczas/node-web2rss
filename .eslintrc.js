@@ -2,7 +2,10 @@ module.exports = {
     "env": {
         "node": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "recommended/node"
+    ],
     "rules": {
         "no-console": "off",
         "linebreak-style": [
