@@ -8,6 +8,7 @@ var ping = require('./routes/ping');
 var rdc = require('./routes/rdc');
 var trojka = require('./routes/trojka');
 var sk = require('./routes/sk');
+var kawanalawe = require('./routes/kawanalawe');
 var sp = require('./routes/sp');
 var terazja = require('./routes/terazja');
 
@@ -29,6 +30,7 @@ app.use('/ping', ping);
 app.use('/rss/rdc', rdc);
 app.use('/rss/trojka', trojka);
 app.use('/rss/sk', sk);
+app.use('/rss/kawanalawe', kawanalawe);
 app.use('/rss/sp', sp);
 app.use('/rss/terazja', terazja);
 
