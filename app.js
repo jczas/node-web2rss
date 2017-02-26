@@ -7,8 +7,9 @@ var bodyParser = require('body-parser');
 var ping = require('./routes/ping');
 var rdc = require('./routes/rdc');
 var trojka = require('./routes/trojka');
-var sk = require('./routes/sk');
+var szklokontaktowe = require('./routes/szklokontaktowe');
 var kawanalawe = require('./routes/kawanalawe');
+var kropkanadi = require('./routes/kropkanadi');
 var sp = require('./routes/sp');
 var terazja = require('./routes/terazja');
 
@@ -29,8 +30,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/ping', ping);
 app.use('/rss/rdc', rdc);
 app.use('/rss/trojka', trojka);
-app.use('/rss/sk', sk);
-app.use('/rss/kawanalawe', kawanalawe);
+app.use('/rss/tvn24/szklokontaktowe', szklokontaktowe);
+app.use('/rss/tvn24/kawanalawe', kawanalawe);
+app.use('/rss/tvn24/kropkanadi', kropkanadi);
 app.use('/rss/sp', sp);
 app.use('/rss/terazja', terazja);
 

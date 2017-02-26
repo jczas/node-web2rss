@@ -11,7 +11,7 @@ var dom = require('xmldom').DOMParser;
 var async = require('async');
 
 router.get('/', function (req, res) {
-    var url = 'http://szklokontaktowe.tvn24.pl/';
+    var url = 'http://www.tvn24.pl/kropka-nad-i,3,m';
 
     request(url, function (error, response, html) {
         if (!error) {
@@ -22,13 +22,19 @@ router.get('/', function (req, res) {
             console.log("main_title: " + main_title);
 
             var subpages = [];
-            for (var i = 0, len = nodes.length; i < len; i++) {
+            for (var i = 0, len = nodes.length; i < len && i < 5; i++) {
 
 
                 console.log("node: " + nodes[i].toString());
                 (function () {
-                    var suburl = 'http://szklokontaktowe.tvn24.pl' + (nodes[i].attributes[1].value).replace(/#autoplay$/, '');
-                    var title = (nodes[i].attributes[0].value).substring(9);
+                    var suburl;
+                    var title;
+                    for (var j = 0, len2 = nodes[i].attributes.length; j < len2; j++) {
+                        if (nodes[i].attributes[j].name == 'href') {
+                            suburl = 'http://www.tvn24.pl' + (nodes[i].attributes[j].value).replace(/#autoplay$/, '');
+                            title = (nodes[i].attributes[j].value).replace(/#autoplay$/, '');
+                        }
+                    }
 
                     console.log("node.suburl: " + suburl);
                     console.log("node.title: " + title);
@@ -39,7 +45,7 @@ router.get('/', function (req, res) {
                             url: suburl
                         });
                     });
-                } ());
+                }());
             }
 
             async.parallel(subpages, function (err, results) {
@@ -53,8 +59,8 @@ router.get('/', function (req, res) {
 
                     var feed = new RSS({
                         title: main_title,
-                        site_url: 'http://szklokontaktowe.tvn24.pl/',
-                        image_url: 'http://szklokontaktowe.tvn24.pl/img/logo_small_tvn24.png',
+                        site_url: 'http://www.tvn24.pl/kropka-nad-i,3,m',
+                        image_url: 'https://upload.wikimedia.org/wikipedia/commons/8/80/TVN_24_Logo.png',
                         ttl: '5'
                     });
 
