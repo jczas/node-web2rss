@@ -21,6 +21,8 @@ router.get('/', function (req, res) {
 
             console.log("main_title: " + main_title);
 
+            var titleEx = /\/kawa-na-lawe,59,m\/([a-zA-z0-9-]*),/;
+
             var subpages = [];
             for (var i = 0, len = nodes.length; i < len && i < 5; i++) {
 
@@ -33,6 +35,11 @@ router.get('/', function (req, res) {
                         if (nodes[i].attributes[j].name == 'href') {
                             suburl = 'http://www.tvn24.pl' + (nodes[i].attributes[j].value).replace(/#autoplay$/, '');
                             title = (nodes[i].attributes[j].value).replace(/#autoplay$/, '');
+
+                            var titleMatch = titleEx.exec(title);
+                            if (titleMatch !== null) {
+                                title = (titleMatch[1]).replace(/-/g, ' ');
+                            }
                         }
                     }
 

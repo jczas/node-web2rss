@@ -23,9 +23,9 @@ router.get('/', function (req, res) {
 
             var subpages = [];
 
+            var titleEx = /\/([a-zA-z0-9-]*),/;
+
             for (var i = 0, len = nodes.length; i < len && i < 5; i++) {
-
-
                 console.log("node: " + nodes[i].toString());
                 (function () {
                     var suburl;
@@ -33,7 +33,13 @@ router.get('/', function (req, res) {
                     for (var j = 0, len2 = nodes[i].attributes.length; j < len2; j++) {
                         if (nodes[i].attributes[j].name == 'href') {
                             suburl = 'http://szklokontaktowe.tvn24.pl' + (nodes[i].attributes[j].value).replace(/#autoplay$/, '');
+
                             title = (nodes[i].attributes[j].value).replace(/#autoplay$/, '');
+
+                            var titleMatch = titleEx.exec(title);
+                            if (titleMatch !== null) {
+                                title = (titleMatch[1]).replace(/-/g, ' ');
+                            }
                         }
                     }
 
@@ -46,7 +52,7 @@ router.get('/', function (req, res) {
                             url: suburl
                         });
                     });
-                } ());
+                }());
             }
 
             async.parallel(subpages, function (err, results) {
