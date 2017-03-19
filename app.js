@@ -12,6 +12,7 @@ var kawanalawe = require('./routes/kawanalawe');
 var kropkanadi = require('./routes/kropkanadi');
 var sp = require('./routes/sp');
 var terazja = require('./routes/terazja');
+var radioplus = require('./routes/radioplus');
 
 var app = express();
 
@@ -35,6 +36,7 @@ app.use('/rss/tvn24/kawanalawe', kawanalawe);
 app.use('/rss/tvn24/kropkanadi', kropkanadi);
 app.use('/rss/sp', sp);
 app.use('/rss/terazja', terazja);
+app.use('/rss/radioplus', radioplus);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
