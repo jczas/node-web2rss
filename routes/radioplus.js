@@ -31,6 +31,7 @@ router.get('/', function (req, res) {
                     feed.item({
                         title: titleMatch[2].trim() + ' - ' + titleMatch[1].trim(),
                         url: mp3Match[1],
+                        guid: mp3Match[1].substring(mp3Match[1].lastIndexOf("/")),
                         enclosure: { url: mp3Match[1] }
                     });
                 }
