@@ -20,7 +20,7 @@ router.get('/', function (req, res) {
                 ttl: '5'
             });
 
-            var titleRegEx = /(.*)<\/em>/g;
+            var titleRegEx = /<em class="DosisSemiBold">([\s\S]*?)<\/em>([\s\S]*?)<\/div>/g;
             var mp3RegEx = /"([^"]*.\.mp3)"/g;
             var titleMatch;
             var mp3Match;
@@ -29,7 +29,7 @@ router.get('/', function (req, res) {
                 if (mp3Match = mp3RegEx.exec(html)) {
                     console.log(titleMatch[1], mp3Match[1]);
                     feed.item({
-                        title: titleMatch[1].trim(),
+                        title: titleMatch[2].trim() + ' - ' + titleMatch[1].trim(),
                         url: mp3Match[1],
                         enclosure: { url: mp3Match[1] }
                     });
