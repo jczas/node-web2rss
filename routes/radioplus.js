@@ -26,8 +26,10 @@ router.get('/', function (req, res) {
             var mp3Match;
 
             while (titleMatch = titleRegEx.exec(html)) {
-                if (mp3Match = mp3RegEx.exec(html)) {
-                    console.log(titleMatch[1], mp3Match[1]);
+                if ((mp3Match = mp3RegEx.exec(html)) && titleMatch[2].trim() !== 'Wiadomości Radia Plus') {
+                    console.log('title[1]: ' + titleMatch[1]);
+                    console.log('title[2]: ' + titleMatch[2]);
+                    console.log('url: ' + mp3Match[1]);
                     feed.item({
                         title: titleMatch[2].trim() + ' - ' + titleMatch[1].trim(),
                         url: mp3Match[1],
